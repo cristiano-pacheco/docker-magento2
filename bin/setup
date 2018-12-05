@@ -1,0 +1,25 @@
+#!/bin/bash
+bin/cli chmod u+x bin/magento
+
+docker-compose exec phpfpm /usr/local/bin/php ./bin/magento setup:install \
+  --db-host=db \
+  --db-name=magento \
+  --db-user=magento \
+  --db-password=magento \
+  --base-url=http://local.magento2.com.br/ \
+  --admin-firstname=Chris \
+  --admin-lastname=Pacheco \
+  --admin-email=chris.spb25@gmail.com \
+  --admin-user=admin \
+  --admin-password=Matrix0123 \
+  --language=en_US \
+  --currency=USD \
+  --timezone=America/Sao_Paulo \
+  --use-rewrites=1
+
+bin/fixperms
+
+echo "Turning on developer mode.."
+bin/magento deploy:mode:set developer
+
+bin/magento indexer:reindex
